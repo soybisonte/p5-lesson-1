@@ -4,40 +4,53 @@ import p5 from 'p5'
 
 const s = (p5) => {
 
-  let x = 100;
-  let y = 100;
-  let slider;
+  let xoff = 0;
 
 
   p5.setup = () => {
+
     p5.createCanvas(800, 800);
+
   };
 
   p5.draw = () => {
-    let middle = {
-      x: p5.width / 2,
-      y: p5.height / 2
-    }
-    p5.background(0, 30);
-    // p5.fill(255);
+
+    p5.translate(p5.width / 2, p5.height / 2);
+
+    p5.background(0);
     p5.noFill();
-    p5.stroke(255, 125, 0)
-    // p5.blendMode(p5.SOFT_LIGHT)
-    const n = 20;
-    let separation = 30;
-    let moveCoords = {
-      x: p5.mouseX - middle.x,
-      y: p5.mouseY - middle.y,
-    }
-    p5.rectMode(p5.CENTER)
-    const delta = 0.0012
-    p5.translate(middle.x, middle.y)
-      for (var i = 0; i < n; i++) {
-        p5.push()
-        // p5.rotate(p5.frameCount * delta * (i + 1) + 4 * delta * i)
-          p5.rect(0, 0, separation + (i * separation), separation + (i * separation));
-          p5.pop()
+    p5.stroke(0, 255, 125);
+
+    const n = 30;
+    const separation = 15;
+    const initialSize = 30;
+
+    const delta = p5.frameCount * 0.0073;
+
+    //noise
+
+    xoff += 0.01;
+
+
+    for (var i = 0; i < n; i++) {
+      let noize = p5.noise(xoff + i) * 150;
+      p5.push()
+      let shapeCoords = {
+        r: initialSize + (i * separation),
+        theta: initialSize + (i * separation),
       }
+      p5.quad(
+        shapeCoords.r +  0.3 * noize, -shapeCoords.theta +  0.3 * noize,
+        -shapeCoords.r + 0.3 * noize, -shapeCoords.theta + 0.3 * noize,
+        -shapeCoords.r + 1.3 * noize, shapeCoords.theta + 1.3 * noize,
+        shapeCoords.r + 1.3 * noize, shapeCoords.theta + 1.3 * noize
+      );
+
+      p5.pop()
+
+    }
+
+
   };
 
 };
